@@ -1,4 +1,4 @@
-#! /bin/sh
+#! /bin/bash
 
 set -e
 
@@ -29,9 +29,12 @@ if [ "$OAUTH_ADDITIONAL_PARAMS" != "**None**" ]; then
     replace_in_index "additionalQueryStringParams: {}" "additionalQueryStringParams: {$OAUTH_ADDITIONAL_PARAMS}"
 fi
 
+echo $SWAGGER_JSON
+
 if [[ -f $SWAGGER_JSON ]]; then
-  sed -i "s|http://petstore.swagger.io/v2/swagger.json|swagger.json|g" $INDEX_FILE
-  sed -i "s|http://example.com/api|swagger.json|g" $INDEX_FILE
+	SWAGGER_JSON=$(basename "$SWAGGER_JSON")
+  sed -i "s|http://petstore.swagger.io/v2/swagger.json|$SWAGGER_JSON|g" $INDEX_FILE
+  sed -i "s|http://example.com/api|$SWAGGER_JSON|g" $INDEX_FILE
 else
   sed -i "s|http://petstore.swagger.io/v2/swagger.json|$API_URL|g" $INDEX_FILE
   sed -i "s|http://example.com/api|$API_URL|g" $INDEX_FILE
